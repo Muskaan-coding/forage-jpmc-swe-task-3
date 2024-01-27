@@ -202,7 +202,7 @@ def get(req_handler, routes):
                 req_handler.wfile.write(bytes(data,  encoding = 'utf-8'))
                 return
 
-def run(routes, host = '0.0.0.0', port = 8080):
+def run(routes, host = '0.0.0.0', port =4000):
     """ Runs a class as a server whose methods have been decorated with
         @route.
     """
@@ -241,7 +241,11 @@ class App(object):
         self._data_1    = order_book(read_csv(), self._book_1, 'ABC')
         self._data_2    = order_book(read_csv(), self._book_2, 'DEF')
         self._rt_start = datetime.now()
-        self._sim_start, _, _  = next(self._data_1)
+        try:
+            self._sim_start, _, _ = next(self._data_1)
+        except StopIteration:
+            print("exception")
+
         self.read_10_first_lines()
 
     @property
@@ -263,9 +267,12 @@ class App(object):
                 yield t, bids, asks
 
     def read_10_first_lines(self):
+        try:
             for _ in iter(range(10)):
                 next(self._data_1)
                 next(self._data_2)
+        except StopIteration:
+            print("exception 2")
 
     @route('/query')
     def handle_query(self, x):

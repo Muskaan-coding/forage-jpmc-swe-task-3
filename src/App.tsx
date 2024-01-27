@@ -13,7 +13,7 @@ class App extends Component<{}, IState> {
     super(props);
     this.state = {
       data: [],
-      showGraph: false,
+      showGraph: true,
     };
   }
 
@@ -25,18 +25,18 @@ class App extends Component<{}, IState> {
 
   getDataFromServer() {
     let x = 0;
-    const interval = setInterval(() => {
-      DataStreamer.getData((serverResponds: ServerRespond[]) => {
-        this.setState({
-          data: serverResponds,
-          showGraph: true,
-        });
-      });
-      x++;
-      if (x > 1000) {
-        clearInterval(interval);
-      }
-    }, 100);
+const interval = setInterval(() => {
+  DataStreamer.getData((htmlContent: string) => {
+    // Handle the HTML content as needed
+    console.log(htmlContent);
+    // You can manipulate the DOM or perform other actions with the HTML content here
+  });
+  x++;
+  if (x > 5) {
+    clearInterval(interval);
+  }
+}, 100);
+
   }
 
   render() {
